@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "confidence_based_routing"
+  site-url: "https://mshahoyi.github.io/confidence_based_routing"
+  description: "Tests confidence based routing against RouteLLM results"
+  repo-branch: main
+  repo-url: "https://github.com/mshahoyi/confidence_based_routing"
