@@ -30,22 +30,11 @@ class IndependentVariables:
     model_name: str
     dataset_name: str
     sys_prompt: str
-    prompt_type: Literal["yesno", "yesno_probs", "scale", "probe"]
+    prompt_type: Literal["yesno_probs", "scale", "probe"]
     eval_size: int = 100
     threshold: float = 0.5
     max_new_tokens: int = 5
 # %%
-dep_exp1 = IndependentVariables(
-    # model_name="TechxGenus/Meta-Llama-3-8B-GPTQ",
-    model_name="Qwen/Qwen2.5-3B-Instruct",
-    dataset_name="mtbench",
-    sys_prompt="You are a helpful assistant. You will get a prompt from a user. Are you confident that you will be able to answer this prompt in a factually correct, helpful, informative, engaging, and creative way? Answer with a yes or no. Nothing else.",
-    prompt_type="yesno",
-    eval_size=100,
-    threshold=0.5,
-    max_new_tokens=1,
-)
-
 dep_exp2 = IndependentVariables(
     # model_name="TechxGenus/Meta-Llama-3-8B-GPTQ",
     model_name="Qwen/Qwen2.5-3B-Instruct",
@@ -108,12 +97,7 @@ class ConfidenceRouter(Router):
             return_dict_in_generate=True,
             output_scores=True
         )
-        if self.indep_vars.prompt_type == "yesno":
-            response = self.tokenizer.decode(outputs.sequences[0], skip_special_tokens=False)
-            if self.verbose:
-                print(f"Response: {response}")
-            return 0.0 if response[-3:] == "Yes" else 1.0
-        
+
         if self.indep_vars.prompt_type == "yesno_probs":
             tokens_of_interest = [self.tokenizer.encode("Yes"), self.tokenizer.encode("No")]
             scores = outputs.scores[-1][:, tokens_of_interest]
@@ -130,10 +114,6 @@ class ConfidenceRouter(Router):
         raise ValueError(f"Prompt type {self.indep_vars.prompt_type} not supported")
 
 # %%
-router = ConfidenceRouter(model, tokenizer, indep_vars=dep_exp1, verbose=True)
-router.calculate_strong_win_rate("What is the role of importlib in python?")
-
-# %%
 router = ConfidenceRouter(model, tokenizer, indep_vars=dep_exp2, verbose=True)
 router.calculate_strong_win_rate("Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?")
 
@@ -144,13 +124,12 @@ router.calculate_strong_win_rate("Betty is saving money for a new wallet which c
 # %%
 dataset = datasets.load_dataset("openai/gsm8k", 'main', split="test")
 list = []
-# for i in dataset.take(100):
-#     answer, expected_value = router.calculate_strong_win_rate(i["question"])
-#     list.append(expected_value)
+for i in dataset.take(100):
+    expected_value = router.calculate_strong_win_rate(i["question"])
+    list.append(expected_value)
 
 pd.Series(list).hist()
 # %%
-ROUTER_CLS["confidence_yesno"] = ConfidenceRouter
 ROUTER_CLS["confidence_yesno_probs"] = ConfidenceRouter
 ROUTER_CLS["confidence_scale"] = ConfidenceRouter
 NAME_TO_CLS = {v: k for k, v in ROUTER_CLS.items()}
@@ -164,14 +143,13 @@ importlib.reload(routellm)
 from confidence_based_routing.evaluate import evaluate
 
 config = {
-    "confidence_yesno": {"model": model, "tokenizer": tokenizer, "indep_vars": dep_exp1}, 
     "confidence_yesno_probs": {"model": model, "tokenizer": tokenizer, "indep_vars": dep_exp2}, 
     "confidence_scale": {"model": model, "tokenizer": tokenizer, "indep_vars": dep_exp3}, 
     "mf": {"checkpoint_path": "routellm/mf_gpt4_augmented"},
 }
 
 evaluate(
-    routers=["confidence_yesno"], 
+    routers=["confidence_yesno_probs", "confidence_scale"], 
     benchmark="gsm8k", 
     config=config,
     overwrite_cache=[]

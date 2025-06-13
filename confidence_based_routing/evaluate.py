@@ -130,10 +130,10 @@ def generate_results(
         print("Metrics:\n", metrics)
 
 
-def pretty_print_results(threshold, accuracy, model_counts, total):
+def pretty_print_results(router, benchmark, threshold, accuracy, model_counts, total):
     header = (
         "=" * 15
-        + f" {router} with threshold {threshold} on {args.benchmark} "
+        + f" {router} with threshold {threshold} on {benchmark} "
         + "=" * 15
     )
     print("\n" + header)
@@ -219,7 +219,7 @@ def evaluate(**args):
                 controller, router, args.num_results, False
             ):
                 print(f"Evaluating router: {router} with threshold {threshold}...")
-                pretty_print_results(threshold, accuracy, model_counts, total)
+                pretty_print_results(router, args.benchmark, threshold, accuracy, model_counts, total)
 
                 result = {
                     "method": str(router),
@@ -236,7 +236,7 @@ def evaluate(**args):
         all_results,
         benchmark,
         args.benchmark,
-        controller.model_pair.strong,
+        controller.model_pair,
         args.output,
     )
 
