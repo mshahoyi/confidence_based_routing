@@ -1,0 +1,52 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "confidence_based_routing",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation.",
+    "crumbs": [
+      "confidence_based_routing"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "confidence_based_routing",
+    "section": "Developer Guide",
+    "text": "Developer Guide\nIf you are new to using nbdev here are some useful pointers to get you started.\n\nInstall confidence_based_routing in Development mode\n# make sure confidence_based_routing package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to confidence_based_routing\n$ nbdev_prepare",
+    "crumbs": [
+      "confidence_based_routing"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "confidence_based_routing",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/mshahoyi/confidence_based_routing.git\nor from conda\n$ conda install -c mshahoyi confidence_based_routing\nor from pypi\n$ pip install confidence_based_routing\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "confidence_based_routing"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "confidence_based_routing",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2",
+    "crumbs": [
+      "confidence_based_routing"
+    ]
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "@dataclass\nclass IndependentVariables:\n    model_name: str\n    dataset_name: str\n    prompt: str\n    prompt_type: Literal[\"yesno\", \"scale\", \"probe\"]\n    eval_size: int = 100\n    threshold: float = 0.5\n\n\ndep_exp1 = IndependentVariables(\n    model_name=\"TechxGenus/Meta-Llama-3-8B-GPTQ\",\n    dataset_name=\"mtbench\",\n    prompt=\"Below is a prompt form a user: \\n{prompt}\\n\\n\\nAre you confident that you will be able to answer this prompt in a factually correct, helpful, informative, engaging, and creative way? Answer with a yes or no. Nothing else.\",\n    prompt_type=\"yesno\",\n    eval_size=100,\n    threshold=0.5,\n)\n\n\n# Fetch the MTBench dataset\nmodel = LLM(dep_exp1.model_name, dtype=\"auto\")\n\nINFO 06-13 13:52:29 [config.py:823] This model supports multiple tasks: {'score', 'reward', 'classify', 'embed', 'generate'}. Defaulting to 'generate'.\nWARNING 06-13 13:52:29 [config.py:931] gptq quantization is not fully optimized yet. The speed can be slower than non-quantized models.\nINFO 06-13 13:52:29 [llm_engine.py:230] Initializing a V0 LLM engine (v0.9.1) with config: model='TechxGenus/Meta-Llama-3-8B-GPTQ', speculative_config=None, tokenizer='TechxGenus/Meta-Llama-3-8B-GPTQ', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, override_neuron_config={}, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=8192, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, pipeline_parallel_size=1, disable_custom_all_reduce=False, quantization=gptq, enforce_eager=False, kv_cache_dtype=auto,  device_config=cuda, decoding_config=DecodingConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_backend=''), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=None, served_model_name=TechxGenus/Meta-Llama-3-8B-GPTQ, num_scheduler_steps=1, multi_step_stream_outputs=True, enable_prefix_caching=None, chunked_prefill_enabled=False, use_async_output_proc=True, pooler_config=None, compilation_config={\"level\":0,\"debug_dump_path\":\"\",\"cache_dir\":\"\",\"backend\":\"\",\"custom_ops\":[],\"splitting_ops\":[],\"use_inductor\":true,\"compile_sizes\":[],\"inductor_compile_config\":{\"enable_auto_functionalized_v2\":false},\"inductor_passes\":{},\"use_cudagraph\":true,\"cudagraph_num_of_warmups\":0,\"cudagraph_capture_sizes\":[256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],\"cudagraph_copy_inputs\":false,\"full_cuda_graph\":false,\"max_capture_size\":256,\"local_cache_dir\":null}, use_cached_outputs=False, \n\n\n\n\n\n\n\n\n\n\n\nINFO 06-13 13:52:31 [cuda.py:275] Cannot use FlashAttention-2 backend for Volta and Turing GPUs.\nINFO 06-13 13:52:31 [cuda.py:324] Using XFormers backend.\n\n\n[W613 13:52:42.761534086 socket.cpp:200] [c10d] The hostname of the client socket cannot be retrieved. err=-3\n\n\nINFO 06-13 13:52:52 [parallel_state.py:1065] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, TP rank 0, EP rank 0\nINFO 06-13 13:52:52 [model_runner.py:1171] Starting to load model TechxGenus/Meta-Llama-3-8B-GPTQ...\n\n\n[W613 13:52:52.772060097 socket.cpp:200] [c10d] The hostname of the client socket cannot be retrieved. err=-3\n\n\nINFO 06-13 13:52:53 [weight_utils.py:292] Using model weights format ['*.safetensors']\n\n\n\n\n\nINFO 06-13 13:53:07 [weight_utils.py:308] Time spent downloading weights for TechxGenus/Meta-Llama-3-8B-GPTQ: 13.625669 seconds\nINFO 06-13 13:53:07 [weight_utils.py:345] No model.safetensors.index.json found in remote.\n\n\n\n\n\nINFO 06-13 13:53:10 [default_loader.py:272] Loading weights took 3.23 seconds\nINFO 06-13 13:53:12 [model_runner.py:1203] Model loading took 5.3473 GiB and 17.936974 seconds\nINFO 06-13 13:53:18 [worker.py:294] Memory profiling takes 5.82 seconds\nINFO 06-13 13:53:18 [worker.py:294] the current vLLM instance can use total_gpu_memory (14.74GiB) x gpu_memory_utilization (0.90) = 13.27GiB\nINFO 06-13 13:53:18 [worker.py:294] model weights take 5.35GiB; non_torch_memory takes 0.05GiB; PyTorch activation peak memory takes 1.23GiB; the rest of the memory reserved for KV Cache is 6.64GiB.\nINFO 06-13 13:53:18 [executor_base.py:113] # cuda blocks: 3398, # CPU blocks: 2048\nINFO 06-13 13:53:18 [executor_base.py:118] Maximum concurrency for 8192 tokens per request: 6.64x\nINFO 06-13 13:53:22 [model_runner.py:1513] Capturing cudagraphs for decoding. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI. If out-of-memory error occurs during cudagraph capture, consider decreasing `gpu_memory_utilization` or switching to eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.\n\n\n\n\n\nINFO 06-13 13:54:06 [model_runner.py:1671] Graph capturing finished in 44 secs, took 0.48 GiB\nINFO 06-13 13:54:06 [llm_engine.py:428] init engine (profile, create kv cache, warmup model) took 54.49 seconds\n\n\n\nmodel(\"Hello, how are you?\")\n\n\n---------------------------------------------------------------------------\nTypeError                                 Traceback (most recent call last)\n/tmp/ipykernel_9666/144136012.py in &lt;cell line: 0&gt;()\n----&gt; 1 model(\"Hello, how are you?\")\n\nTypeError: 'LLM' object is not callable\n\n\n\n\n# Fetch Llama3-8b\n\n\n# Prepare prompt dataset of 100\n\n\n# Run all the 100 prompts through the model and get confidence scores\n\n\n# For confidence scores above threshold, let model answer and check the accuracy\n\n\n# Repeat experiment by changing independent variables",
+    "crumbs": [
+      "core"
+    ]
+  }
+]
